@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Calculator</title>
+  <style>
+    body {
+      background-color: rgb(197, 238, 243);
+    }
+
+    .result {
+      display: flex;
+      align-items: center;
+    }
+
+    .barbel {
+      width: 150px;
+      height: 20px;
+      background-color: blueviolet;
+      border: 1px solid;
+      text-align: center;
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .plate {
+      width: 20px;
+      height: 60px;
+      background-color: beige;
+      border: 1px solid;
+      text-align: center;
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <form class="form">
+      <div class="mode">
+
+        <label for="mode">Mode: </label>
+        <select id="mode" name="mode" form="form" onchange="getval(this)">
+          <option value="single">Single</option>
+          <option value="range">Range</option>
+        </select><br>
+      </div>
+
+      <div class="single">
+        <label for="target">Target weight: </label>
+        <input id="target" min="15" step="1" type="number" required value="122"></input><br>
+      </div>
+
+      <div class="range">
+        <label for="from">From: </label>
+        <input id="from" min="0.5" step="0.5" type="number"></input><br>
+
+        <label for="to">To: </label>
+        <input id="to" min="0.5" step="0.5" type="number"></input><br>
+      </div>
+
+      <label for="barbels">Barbels: </label>
+      <input type="checkbox" id="barbel15" name="barbels" value="15" checked>
+      <label for="barbel15">15 kg</label>
+      <input type="checkbox" id="barbel20" name="barbels" value="20">
+      <label for="barbel20">20 kg</label><br>
+
+      <label for="plates">Plates: </label><br>
+      <label for="0.5">0.5 kg:</label>
+      <input id="0.5" type="number" step="1" min="0" name="plates" required></input><br>
+      <label for="1">1 kg:</label>
+      <input id="1" type="number" step="1" min="0" name="plates" required></input><br>
+      <label for="2">2 kg:</label>
+      <input id="2" type="number" step="1" min="0" name="plates" required></input><br>
+      <label for="5">5 kg:</label>
+      <input id="5" type="number" step="1" min="0" name="plates" required></input><br>
+      <label for="10">10 kg:</label>
+      <input id="10" type="number" step="1" min="0" name="plates" required></input><br>
+      <label for="15">10 kg:</label>
+      <input id="15" type="number" step="1" min="0" name="plates" required></input><br>
+      <label for="20">20 kg:</label>
+      <input id="20" type="number" step="1" min="0" name="plates" required></input><br>
+      <label for="25">25 kg:</label>
+      <input id="25" type="number" step="1" min="0" name="plates" required></input><br>
+
+      <button id="submit" type="button">Calculate</button>
+
+    </form>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script type="application/javascript">
+    const MODES = Object.freeze({
+      single: 'single',
+      range: 'range',
+    })
+    let mode = ''
+    let barbels = []
+    let plates = []
+    let result = {}
+
+    setup()
+
+    $('input[name="barbels"]').click(handleBarbels)
+
+    $('input[name="plates"]').on('change', handlePlates)
+
+    $("#submit").on("click", submit)
+
+    function setup() {
+      mode = MODES.single
+      barbels = [15]
+      plates = [[25, 0], [20, 2], [15, 2], [10, 2], [5, 2], [2, 4], [1, 2], [0.5, 2]]
+
+      plates.forEach((plate, index) => {
+        $(`#${plate[0]}`).val(plate[1])
+        // TODO: bug here
+        console.log(plate[0], $(`#${plate[0]}`))
+      })
+
+      genUIByMode(MODES.single)
+    }
+
+    function getval(sel) {
+      mode = $("#mode option:selected").val()
+      genUIByMode(mode)
+    }
+
+    function genUIByMode(mode) {
+      if (mode === MODES.single) {
+        $('.range').css('opacity', '0')
+        $('.single').css('opacity', '1')
+        return
+      }
+
+      if (mode === MODES.range) {
+        $('.range').css('opacity', '1')
+        $('.single').css('opacity', '0')
+        return
+      }
+    }
+
+    function handleBarbels(e) {
+      const target = e.currentTarget
+      const val = Number($(target).val() || 0)
+
+      if ($(target).is(':checked')) {
+        if (val && !barbels.includes(val)) {
+          barbels.push(val)
+          barbels = barbels.sort()
+        }
+      } else {
+        barbels = barbels.filter(item => item !== val)
+      }
+    }
+
+    function handlePlates(e) {
+      const target = e.currentTarget
+      const val = Number($(target).val() || 0)
+      const id = $(target).attr('id')
+      const index = plates.findIndex(plate => String(plate[0]) === id)
+      plates[index][1] = val
+    }
+
+    function submit(e) {
+      e.preventDefault()
+
+      $(`.result`).remove()
+
+      const mode = $('#mode').val()
+
+      if (mode === MODES.range) {
+        const from = Number($("#from").val())
+        const to = Number($("#to").val())
+        for (let i = from; i <= to; i++) {
+          const result = calculate(i, barbels, plates)
+          genUI(result, i)
+        }
+      } else if (mode === MODES.single) {
+        const target = Number($('#target').val())
+        const result = calculate(target, barbels, plates)
+        genUI(result)
+      }
+    }
+
+    function calculate(target, barbels, plates) {
+      const result = []
+
+      if (!target || !barbels || !plates || barbels.length === 0) {
+        return result
+      }
+
+      let holder = target
+
+      barbels.every(barbel => {
+        if (barbel <= target) {
+          holder -= barbel
+          result.push([barbel, 1])
+          return false
+        }
+        return true
+      })
+
+      if (holder === target) return result
+
+      plates.forEach(plate => {
+        const weight = plate[0]
+        let amount = 0
+
+        while (amount < plate[1] && holder >= weight * 2) {
+          holder -= weight * 2
+          amount += 2
+        }
+
+        if (amount) {
+          result.push([weight, amount])
+        }
+      })
+
+      if (holder === 0) return result
+
+      return []
+    }
+
+    function genUI(result, index = 0) {
+      $('.container').append(`<div class="result result${index}"></div>`)
+
+      result.forEach((item, i) => {
+        const weight = item[0]
+        const $title = $(`<div class="title">${item[0]}</div>`)
+        const $div = $("<div>", {
+          class: i === 0 ? `barbel barbel${weight}` : `plate plate${weight}`,
+          css: { "height": i === 0 ? 20 : genHeight(weight) },
+          text: weight,
+        })
+
+        $(`.result${index}`).append($div)
+      })
+    }
+
+    function genHeight(weight) {
+      if (weight >= 10) return weight * 8
+      if (weight === 0.5) return weight * 40
+      if (weight === 1) return weight * 30
+      if (weight === 2) return weight * 25
+      return weight * 13
+    }
+  </script>
+</body>
+
+</html>

@@ -2,11 +2,11 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Calculator</title>
   <style>
     body {
-      background-color: rgb(197, 238, 243);
+      background-color: #c5eef3;
     }
 
     .result {
@@ -15,10 +15,11 @@
     }
 
     .barbel {
-      width: 150px;
-      height: 20px;
-      background-color: blueviolet;
-      border: 1px solid;
+      width: 130px;
+      height: 25px;
+      background-color: #8a2be2;
+      color: #f1f1f1;
+      border: 1px solid #333;
       text-align: center;
       border-radius: 2px;
       display: flex;
@@ -27,12 +28,14 @@
     }
 
     .plate {
-      width: 20px;
+      width: 30px;
+      width: fit-content;
+      padding: 5px;
       height: 60px;
-      background-color: beige;
-      border: 1px solid;
+      background-color: #f5f5dc;
+      border: 1px solid #333;
       text-align: center;
-      border-radius: 2px;
+      border-radius: 4px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -53,16 +56,16 @@
       </div>
 
       <div class="single">
-        <label for="target">Target weight: </label>
-        <input id="target" min="15" step="1" type="number" required value="122"></input><br>
+        <label for="target">Target weight (kg): </label>
+        <input id="target" min="15" step="0.5" type="number" autofocus required value="126.5"></input><br>
       </div>
 
       <div class="range">
-        <label for="from">From: </label>
-        <input id="from" min="0.5" step="0.5" type="number"></input><br>
+        <label for="from">From (kg): </label>
+        <input id="from" min="15" step="0.5" type="number" autofocus></input><br>
 
-        <label for="to">To: </label>
-        <input id="to" min="0.5" step="0.5" type="number"></input><br>
+        <label for="to">To (kg): </label>
+        <input id="to" min="15" step="0.5" type="number" autofocus></input><br>
       </div>
 
       <label for="barbels">Barbels: </label>
@@ -72,8 +75,10 @@
       <label for="barbel20">20 kg</label><br>
 
       <label for="plates">Plates: </label><br>
-      <label for="0.5">0.5 kg:</label>
-      <input id="0.5" type="number" step="1" min="0" name="plates" required></input><br>
+      <label for="025">0.25 kg:</label>
+      <input id="025" type="number" step="1" min="0" name="plates" required></input><br>
+      <label for="05">0.5 kg:</label>
+      <input id="05" type="number" step="1" min="0" name="plates" required></input><br>
       <label for="1">1 kg:</label>
       <input id="1" type="number" step="1" min="0" name="plates" required></input><br>
       <label for="2">2 kg:</label>
@@ -82,7 +87,7 @@
       <input id="5" type="number" step="1" min="0" name="plates" required></input><br>
       <label for="10">10 kg:</label>
       <input id="10" type="number" step="1" min="0" name="plates" required></input><br>
-      <label for="15">10 kg:</label>
+      <label for="15">15 kg:</label>
       <input id="15" type="number" step="1" min="0" name="plates" required></input><br>
       <label for="20">20 kg:</label>
       <input id="20" type="number" step="1" min="0" name="plates" required></input><br>
@@ -107,7 +112,11 @@
 
     setup()
 
-    $('input[name="barbels"]').click(handleBarbels)
+    $(document).on('keypress', handlePressEnter)
+    $('input[name="barbels"]').on('keypress', handlePressEnter)
+    $('input[name="plates"]').on('keypress', handlePressEnter)
+
+    $('input[name="barbels"]').on('click', handleBarbels)
 
     $('input[name="plates"]').on('change', handlePlates)
 
@@ -116,23 +125,27 @@
     function setup() {
       mode = MODES.single
       barbels = [15]
-      plates = [[25, 0], [20, 2], [15, 2], [10, 2], [5, 2], [2, 4], [1, 2], [0.5, 2]]
+      plates = [[25, 0], [20, 2], [15, 2], [10, 2], [5, 2], [2, 4], [1, 2], [0.5, 2], [0.25, 0]]
 
       plates.forEach((plate, index) => {
-        $(`#${plate[0]}`).val(plate[1])
-        // TODO: bug here
-        console.log(plate[0], $(`#${plate[0]}`))
+        $(`#${genId(plate[0])}`).val(plate[1])
       })
 
-      genUIByMode(MODES.single)
+      genWeightInput(MODES.single)
+    }
+
+    function handlePressEnter(e) {
+      if (e.which == 13) {
+        submit(e)
+      }
     }
 
     function getval(sel) {
       mode = $("#mode option:selected").val()
-      genUIByMode(mode)
+      genWeightInput(mode)
     }
 
-    function genUIByMode(mode) {
+    function genWeightInput(mode) {
       if (mode === MODES.single) {
         $('.range').css('opacity', '0')
         $('.single').css('opacity', '1')
@@ -164,7 +177,7 @@
       const target = e.currentTarget
       const val = Number($(target).val() || 0)
       const id = $(target).attr('id')
-      const index = plates.findIndex(plate => String(plate[0]) === id)
+      const index = plates.findIndex(plate => genId(plate[0]) === id)
       plates[index][1] = val
     }
 
@@ -213,7 +226,7 @@
         const weight = plate[0]
         let amount = 0
 
-        while (amount < plate[1] && holder >= weight * 2) {
+        while (amount <= plate[1] - 2 && holder >= weight * 2) {
           holder -= weight * 2
           amount += 2
         }
@@ -229,27 +242,41 @@
     }
 
     function genUI(result, index = 0) {
-      $('.container').append(`<div class="result result${index}"></div>`)
+      const classname = `result${index}`
+      $('.container').append(`<div class="result ${classname}"></div>`)
+
+      if (result.length === 0) {
+        $(`.${classname}`).append($('<div class="empty">No result</div>'))
+        return
+      }
 
       result.forEach((item, i) => {
         const weight = item[0]
-        const $title = $(`<div class="title">${item[0]}</div>`)
-        const $div = $("<div>", {
-          class: i === 0 ? `barbel barbel${weight}` : `plate plate${weight}`,
-          css: { "height": i === 0 ? 20 : genHeight(weight) },
-          text: weight,
-        })
+        let amount = item[1]
 
-        $(`.result${index}`).append($div)
+        while (amount >= 1) {
+          amount -= i === 0 ? 1 : 2
+          const $div = $("<div>", {
+            class: i === 0 ? `barbel barbel${weight}` : `plate plate${weight}-${i}`,
+            css: { "height": i === 0 ? '' : genHeight(weight) },
+            text: weight,
+          })
+          $(`.${classname}`).append($div)
+        }
       })
     }
 
     function genHeight(weight) {
-      if (weight >= 10) return weight * 8
-      if (weight === 0.5) return weight * 40
-      if (weight === 1) return weight * 30
+      if (weight >= 10) return weight * 9
+      if (weight === 0.25) return weight * 65
+      if (weight === 0.5) return weight * 45
+      if (weight === 1) return weight * 35
       if (weight === 2) return weight * 25
       return weight * 13
+    }
+
+    function genId(weight) {
+      return String(weight).replace('.', '')
     }
   </script>
 </body>

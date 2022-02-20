@@ -4,6 +4,8 @@
 <head>
   <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Calculator</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   <style>
     body {
       background-color: #c5eef3;
@@ -44,57 +46,82 @@
 </head>
 
 <body>
-  <div class="container">
-    <form class="form">
-      <div class="mode">
-
-        <label for="mode">Mode: </label>
-        <select id="mode" name="mode" form="form" onchange="getval(this)">
-          <option value="single">Single</option>
-          <option value="range">Range</option>
-        </select><br>
+  <div class="container my-2">
+    <form>
+      <div id="mode" class="mb-3">
+        <label for="mode"><b>Mode:</b></label>
+        <div class="form-check d-inline-block mx-2">
+          <input class="form-check-input" type="radio" id="input-single" name="mode" value="single" checked>
+          <label for="input-single" class="form-check-label">Single</label>
+        </div>
+        <div class="form-check d-inline-block">
+          <input class="form-check-input" type="radio" id="input-range" name="mode" value="range">
+          <label for="input-range" class="form-check-label">Range</label><br>
+        </div>
       </div>
 
-      <div class="single">
-        <label for="target">Target weight (kg): </label>
-        <input id="target" min="15" step="0.5" type="number" autofocus required value="126.5"></input><br>
+      <div class="mb-3">
+        <label for="barbels"><b>Barbels:</b></label>
+        <div class="form-check d-inline-block mx-2">
+          <input class="form-check-input" type="checkbox" id="barbel15" name="barbels" value="15" checked>
+          <label for="barbel15" class="form-check-label">15 kg</label>
+        </div>
+        <div class="form-check d-inline-block">
+          <input class="form-check-input" type="checkbox" id="barbel20" name="barbels" value="20">
+          <label for="barbel20" class="form-check-label">20 kg</label><br>
+        </div>
       </div>
 
-      <div class="range">
-        <label for="from">From (kg): </label>
-        <input id="from" min="15" step="0.5" type="number" autofocus></input><br>
+      <div class="mb-3">
+        <label for="plates" class="mb-2"><b>Plates:</b></label><br>
 
-        <label for="to">To (kg): </label>
-        <input id="to" min="15" step="0.5" type="number" autofocus></input><br>
+        <div class="input-group input-group-sm mb-1">
+          <label for="025" class="input-group-text">0.25 kg</label>
+          <input id="025" class="form-control" type="number" step="1" min="0" name="plates" required></input><br>
+        </div>
+
+        <div class="input-group input-group-sm mb-1">
+          <label for="05" class="input-group-text">0.5 kg</label>
+          <input id="05" class="form-control" type="number" step="1" min="0" name="plates" required></input><br>
+        </div>
+
+        <div class="input-group input-group-sm mb-1">
+          <label for="1" class="input-group-text">1 kg</label>
+          <input id="1" class="form-control" type="number" step="1" min="0" name="plates" required></input><br>
+        </div>
+
+        <div class="input-group input-group-sm mb-1">
+          <label for="2" class="input-group-text">2 kg</label>
+          <input id="2" class="form-control" type="number" step="1" min="0" name="plates" required></input><br>
+        </div>
+
+        <div class="input-group input-group-sm mb-1">
+          <label for="5" class="input-group-text">5 kg</label>
+          <input id="5" class="form-control" type="number" step="1" min="0" name="plates" required></input><br>
+        </div>
+
+        <div class="input-group input-group-sm mb-1">
+          <label for="10" class="input-group-text">10 kg</label>
+          <input id="10" class="form-control" type="number" step="1" min="0" name="plates" required></input><br>
+        </div>
+
+        <div class="input-group input-group-sm mb-1">
+          <label for="15" class="input-group-text">15 kg</label>
+          <input id="15" class="form-control" type="number" step="1" min="0" name="plates" required></input><br>
+        </div>
+
+        <div class="input-group input-group-sm mb-1">
+          <label for="20" class="input-group-text">20 kg</label>
+          <input id="20" class="form-control" type="number" step="1" min="0" name="plates" required></input><br>
+        </div>
+
+        <div class="input-group input-group-sm mb-1">
+          <label for="25" class="input-group-text">25 kg</label>
+          <input id="25" class="form-control" type="number" step="1" min="0" name="plates" required></input><br>
+        </div>
       </div>
 
-      <label for="barbels">Barbels: </label>
-      <input type="checkbox" id="barbel15" name="barbels" value="15" checked>
-      <label for="barbel15">15 kg</label>
-      <input type="checkbox" id="barbel20" name="barbels" value="20">
-      <label for="barbel20">20 kg</label><br>
-
-      <label for="plates">Plates: </label><br>
-      <label for="025">0.25 kg:</label>
-      <input id="025" type="number" step="1" min="0" name="plates" required></input><br>
-      <label for="05">0.5 kg:</label>
-      <input id="05" type="number" step="1" min="0" name="plates" required></input><br>
-      <label for="1">1 kg:</label>
-      <input id="1" type="number" step="1" min="0" name="plates" required></input><br>
-      <label for="2">2 kg:</label>
-      <input id="2" type="number" step="1" min="0" name="plates" required></input><br>
-      <label for="5">5 kg:</label>
-      <input id="5" type="number" step="1" min="0" name="plates" required></input><br>
-      <label for="10">10 kg:</label>
-      <input id="10" type="number" step="1" min="0" name="plates" required></input><br>
-      <label for="15">15 kg:</label>
-      <input id="15" type="number" step="1" min="0" name="plates" required></input><br>
-      <label for="20">20 kg:</label>
-      <input id="20" type="number" step="1" min="0" name="plates" required></input><br>
-      <label for="25">25 kg:</label>
-      <input id="25" type="number" step="1" min="0" name="plates" required></input><br>
-
-      <button id="submit" type="button">Calculate</button>
+      <button class="btn btn-primary" id="submit" type="button">Calculate</button>
 
     </form>
   </div>
@@ -113,11 +140,12 @@
     setup()
 
     $(document).on('keypress', handlePressEnter)
+    $('input[name="mode"]').on('keypress', handlePressEnter)
     $('input[name="barbels"]').on('keypress', handlePressEnter)
     $('input[name="plates"]').on('keypress', handlePressEnter)
 
+    $('input[name="mode"]').on('click', handleMode)
     $('input[name="barbels"]').on('click', handleBarbels)
-
     $('input[name="plates"]').on('change', handlePlates)
 
     $("#submit").on("click", submit)
@@ -127,11 +155,11 @@
       barbels = [15]
       plates = [[25, 0], [20, 2], [15, 2], [10, 2], [5, 2], [2, 4], [1, 2], [0.5, 2], [0.25, 0]]
 
+      genWeightInput(mode)
+
       plates.forEach((plate, index) => {
         $(`#${genId(plate[0])}`).val(plate[1])
       })
-
-      genWeightInput(MODES.single)
     }
 
     function handlePressEnter(e) {
@@ -140,22 +168,47 @@
       }
     }
 
-    function getval(sel) {
-      mode = $("#mode option:selected").val()
-      genWeightInput(mode)
-    }
-
     function genWeightInput(mode) {
+      const $singleDiv = `<div class="single mb-3 input-group input-group-sm">
+        <label for="target" class="input-group-text">Target weight (kg): </label>
+        <input id="target" class="form-control" min="15" step="0.5" type="number" autofocus required></input><br>
+      </div>`
+
+      const $rangeDiv = `<div class="range mb-3">
+        <div class="input-group input-group-sm mb-1">
+          <label for="from" class="input-group-text">From (kg) </label>
+          <input id="from" class="form-control" min="15" step="0.5" type="number" autofocus required></input><br>
+        </div>
+
+        <div class="input-group input-group-sm mb-1">
+          <label for="to" class="input-group-text">To (kg) </label>
+          <input id="to" class="form-control" min="15" step="0.5" type="number" autofocus required></input><br>
+        </div>
+      </div>`
+
+      const $el = $('#mode')
+
       if (mode === MODES.single) {
-        $('.range').css('opacity', '0')
-        $('.single').css('opacity', '1')
+        $('.single').remove()
+        $('.range').remove()
+        $el.after($singleDiv)
         return
       }
 
       if (mode === MODES.range) {
-        $('.range').css('opacity', '1')
-        $('.single').css('opacity', '0')
+        $('.single').remove()
+        $('.range').remove()
+        $el.after($rangeDiv)
         return
+      }
+    }
+
+    function handleMode(e) {
+      const target = e.currentTarget
+
+      if ($(target).is(':checked')) {
+        mode = $(target).val()
+        genWeightInput(mode)
       }
     }
 
@@ -166,7 +219,7 @@
       if ($(target).is(':checked')) {
         if (val && !barbels.includes(val)) {
           barbels.push(val)
-          barbels = barbels.sort()
+          barbels = barbels.sort((a, b) => b - a)
         }
       } else {
         barbels = barbels.filter(item => item !== val)
@@ -184,17 +237,17 @@
     function submit(e) {
       e.preventDefault()
 
-      $(`.result`).remove()
-
-      const mode = $('#mode').val()
+      $('.result').remove()
 
       if (mode === MODES.range) {
         const from = Number($("#from").val())
         const to = Number($("#to").val())
+        let invalidList = []
         for (let i = from; i <= to; i++) {
           const result = calculate(i, barbels, plates)
-          genUI(result, i)
+          if (result.length === 0) invalidList.push(i)
         }
+        genInvalidResult(invalidList)
       } else if (mode === MODES.single) {
         const target = Number($('#target').val())
         const result = calculate(target, barbels, plates)
@@ -241,14 +294,15 @@
       return []
     }
 
-    function genUI(result, index = 0) {
-      const classname = `result${index}`
-      $('.container').append(`<div class="result ${classname}"></div>`)
+    function genUI(result) {
+      const classname = 'result'
 
       if (result.length === 0) {
-        $(`.${classname}`).append($('<div class="empty">No result</div>'))
+        $('.container').append(`<div class="${classname} mt-3 text-danger">Cannot calculate result from your plates!</div>`)
         return
       }
+
+      $('.container').append(`<div class="${classname} mt-3"></div>`)
 
       result.forEach((item, i) => {
         const weight = item[0]
@@ -264,6 +318,17 @@
           $(`.${classname}`).append($div)
         }
       })
+    }
+
+    function genInvalidResult(invalidList) {
+      if (invalidList.length === 0) {
+        return $('.container').append(`<div class="result mt-3 .text-success">No weight cannot be calculated. Great jobs!</div>`)
+      }
+      $('.container').append(`
+        <div class="result mt-3 d-block">
+          These <b>${invalidList.length}</b> weights can not be calculated:
+          <div class="text-secondary">${invalidList.join(', ')}</div>
+        </div>`)
     }
 
     function genHeight(weight) {

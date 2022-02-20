@@ -1,0 +1,35 @@
+body {
+  background-color: #d7f9fd;
+}
+
+.result {
+  display: flex;
+  align-items: center;
+}
+
+.barbel {
+  width: 130px;
+  height: 25px;
+  background-color: #8a2be2;
+  color: #f1f1f1;
+  border: 1px solid #333;
+  text-align: center;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.plate {
+  width: 30px;
+  width: fit-content;
+  padding: 5px;
+  height: 60px;
+  background-color: #f5f5dc;
+  border: 1px solid #333;
+  text-align: center;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -30,6 +30,7 @@ function setup() {
     [15, 2],
     [10, 2],
     [5, 2],
+    [2.5, 0],
     [2, 4],
     [1, 2],
     [0.5, 2],
@@ -43,7 +44,7 @@ function setup() {
 
   genWeightInput(mode);
 
-  plates.forEach((plate, index) => {
+  plates.forEach((plate, _) => {
     $(`#${genId(plate[0])}`).val(plate[1]);
   });
 }
@@ -61,9 +62,9 @@ function genWeightInput(mode) {
   if (mode === MODES.single) {
     const target = getLocalStorage("target") || null;
     const $singleDiv = `<div class="single mb-3 input-group input-group-sm">
-          <label for="target" class="input-group-text">Target weight (kg): </label>
-          <input id="target" class="form-control" value="${target}" min="15" step="0.5" type="number" autofocus required></input><br>
-        </div>`;
+      <label for="target" class="input-group-text">Target weight (kg): </label>
+      <input id="target" class="form-control" value="${target}" min="15" step="0.5" type="number" autofocus required></input><br>
+    </div>`;
 
     $(".single").remove();
     $(".range").remove();
@@ -76,16 +77,16 @@ function genWeightInput(mode) {
     const to = getLocalStorage("to") || null;
 
     const $rangeDiv = `<div class="range mb-3">
-          <div class="input-group input-group-sm mb-1">
-            <label for="from" class="input-group-text">From (kg) </label>
-            <input id="from" class="form-control" value="${from}" min="15" step="0.5" type="number" autofocus required></input><br>
-          </div>
+      <div class="input-group input-group-sm mb-1">
+        <label for="from" class="input-group-text">From (kg) </label>
+        <input id="from" class="form-control" value="${from}" min="15" step="0.5" type="number" autofocus required></input><br>
+      </div>
 
-          <div class="input-group input-group-sm mb-1">
-            <label for="to" class="input-group-text">To (kg) </label>
-            <input id="to" class="form-control" value="${to}" min="15" step="0.5" type="number" autofocus required></input><br>
-          </div>
-        </div>`;
+      <div class="input-group input-group-sm mb-1">
+        <label for="to" class="input-group-text">To (kg) </label>
+        <input id="to" class="form-control" value="${to}" min="15" step="0.5" type="number" autofocus required></input><br>
+      </div>
+    </div>`;
 
     $(".single").remove();
     $(".range").remove();
@@ -239,12 +240,13 @@ function genHeight(weight) {
   if (weight === 0.25) return weight * 65;
   if (weight === 0.5) return weight * 45;
   if (weight === 1) return weight * 35;
-  if (weight === 2) return weight * 25;
+  if (weight === 2.5) return weight * 20;
+  if (weight === 2) return weight * 20;
   return weight * 13;
 }
 
 function genId(weight) {
-  return String(weight).replace(".", "");
+  return String(weight).replace(".", "-");
 }
 
 function saveSettings() {

@@ -5,9 +5,10 @@ const app = express();
 app.use(express.static("public"));
 
 // define the first route
-app.get("/", function (req, res) {
+app.get("/", function (_, res) {
   res.send("/pubic/index.html");
 });
 
-// start the server listening for requests
-app.listen(process.env.PORT || 3000, () => console.log("Server is running..."));
+// start the server
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`Server is running on port ${port}.`));
